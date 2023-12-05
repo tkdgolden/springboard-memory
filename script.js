@@ -10,14 +10,17 @@ const COLORS = [
   "blue",
   "green",
   "orange",
-  "purple"
+  "purple",
 ];
 
-topScore = localStorage.getItem("topScore")
-console.log(topScore)
-date = localStorage.getItem("date")
-if ((top != null) && (date != null)){
-  document.querySelector("h3").innerText = "Top Score: " + topScore + " on " + date
+topScore = localStorage.getItem("topScore");
+
+// it is considered a bad practice to commit console log (noise) statements to code base.
+
+date = localStorage.getItem("date");
+if (top !== null && date !== null) {
+  document.querySelector("h3").innerText =
+    "Top Score: " + topScore + " on " + date;
 }
 
 // here is a helper function to shuffle an array
@@ -44,7 +47,7 @@ function shuffle(array) {
 }
 
 let shuffledColors = shuffle(COLORS);
-let counter = 0
+let counter = 0;
 
 // this function loops over the array of colors
 // it creates a new div and gives it a class with the value of the color
@@ -57,8 +60,8 @@ function createDivsForColors(colorArray) {
     // give it a class attribute for the value we are looping over
     newDiv.classList.add(color);
 
-    newDiv.setAttribute("id", counter)
-    counter += 1
+    newDiv.setAttribute("id", counter);
+    counter += 1;
     // call a function handleCardClick when a div is clicked on
     newDiv.addEventListener("click", handleCardClick);
 
@@ -67,71 +70,70 @@ function createDivsForColors(colorArray) {
   }
 }
 
-let selected = []
-let timer = false
-let seconds
+let selected = [];
+let timer = false;
+let seconds;
 
 // TODO: Implement this function!
 function handleCardClick(event) {
   // you can use event.target to see which element was clicked
-  if (timer == false){
-    countTime()
+  if (timer === false) {
+    countTime();
   }
-  event.target.style.backgroundColor = event.target.classList.value
-  if (selected.find(element => element == event.target) != null){
-    selected = []
+  event.target.style.backgroundColor = event.target.classList.value;
+  if (selected.find((element) => element === event.target) !== null) {
+    selected = [];
   }
-  selected.push(event.target)
-  let listDivs = event.target.parentElement.children
-  if (selected.length >= 2){
-    if (selected[0].classList.value == selected[1].classList.value){
-      selected = []
-    }
-    else {
-      for (let each of listDivs){
-        each.removeEventListener("click", handleCardClick)
+  selected.push(event.target);
+  let listDivs = event.target.parentElement.children;
+  if (selected.length >= 2) {
+    if (selected[0].classList.value === selected[1].classList.value) {
+      selected = [];
+    } else {
+      for (let each of listDivs) {
+        each.removeEventListener("click", handleCardClick);
       }
-      setTimeout(function(){
-        selected[0].style.backgroundColor = null
-        selected[1].style.backgroundColor = null
-        selected = []
-        for (let each of listDivs){
-          each.addEventListener("click", handleCardClick)
+      setTimeout(function () {
+        selected[0].style.backgroundColor = null;
+        selected[1].style.backgroundColor = null;
+        selected = [];
+        for (let each of listDivs) {
+          each.addEventListener("click", handleCardClick);
         }
-      }, 1000)
+      }, 1000);
     }
   }
 
-  let correct = true
-  for (let each of listDivs){
-    if (each.style.backgroundColor == ""){
-      correct = false
+  let correct = true;
+  for (let each of listDivs) {
+    if (each.style.backgroundColor === "") {
+      correct = false;
     }
   }
-  if (correct == true){
-    clearInterval(intervalId)
-    console.log(seconds.toString())
-    if (topScore > seconds){
-      localStorage.setItem("topScore", seconds)
-      localStorage.setItem("date", Date())
+  if (correct === true) {
+    clearInterval(intervalId);
+    if (topScore > seconds) {
+      localStorage.setItem("topScore", seconds);
+      localStorage.setItem("date", Date());
     }
   }
 }
 
-let intervalId
+let intervalId;
 
 function countTime() {
-  timer = true
-  seconds = 1
-  intervalId = setInterval(function(){
-    document.querySelector("h2").innerText = ("Time Elapsed: " + seconds + " seconds")
-    seconds += 1
-  }, 1000)
+  timer = true;
+  seconds = 1;
+  intervalId = setInterval(function () {
+    document.querySelector("h2").innerText =
+      "Time Elapsed: " + seconds + " seconds";
+    seconds += 1;
+  }, 1000);
 }
 
-document.querySelector("button").addEventListener("click", function(){
-  location.reload()
-})
+document.querySelector("button").addEventListener("click", function () {
+  location.reload();
+});
 
 // when the DOM loads
 createDivsForColors(shuffledColors);
